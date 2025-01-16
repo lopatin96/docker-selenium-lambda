@@ -24,4 +24,31 @@ def handler(event=None, context=None):
     chrome = webdriver.Chrome(options=options, service=service)
     chrome.get('https://www.google.com/search?q="test"')
 
-    return chrome.find_element(by=By.XPATH, value="//html").text
+    # Ожидание, пока не исчезнет баннер с cookies (если он появляется)
+    try:
+        # Ожидание, пока кнопка "Согласиться с cookies" станет доступной и нажать ее
+        accept_cookies_button = WebDriverWait(chrome, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//button[@aria-label="Согласиться с условиями"]'))
+        )
+        accept_cookies_button.click()
+    except:
+        pass  # Если кнопка не появляется, продолжаем без ее нажатия
+
+    # Ожидаем загрузки результатов поиска
+    WebDriverWait(chrome, 10).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, 'h3'))
+    )
+
+    # Извлекаем ссылки с результатов поиска
+    results = chrome.find_elements(By.CSS_SELECTOR, 'h3')
+    links = [result.find_element(By.XPATH, '..').get_attribute('href') for result in results]
+
+    chrome.quit()  # Закрытие браузера
+
+    # Возвращаем ссылки
+    return {
+        'statusCode': 200,
+        'body': {
+            'links': links
+        }
+    }
