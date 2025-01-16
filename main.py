@@ -25,8 +25,11 @@ def handler(event=None, context=None):
         chrome.get('https://www.google.com/search?q="test"')
     
         # Извлекаем ссылки с результатов поиска
-        results = chrome.find_elements(By.CSS_SELECTOR, 'h3')
-        links = [result.find_element(By.XPATH, '..').get_attribute('href') for result in results]
+        # results = chrome.find_elements(By.CSS_SELECTOR, 'h3')
+        # links = [result.find_element(By.XPATH, '..').get_attribute('href') for result in results]
+
+        chrome = webdriver.Chrome(options=options, service=service)
+        chrome.get('https://www.google.com/search?q="test"')
     
         chrome.quit()  # Закрытие браузера
     
@@ -34,7 +37,7 @@ def handler(event=None, context=None):
         return {
             'statusCode': 200,
             'body': {
-                'links': links
+                'links': chrome.find_element(by=By.XPATH, value="//html").text
             }
         }
     except Exception as e:
