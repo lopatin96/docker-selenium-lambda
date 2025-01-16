@@ -1,14 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from tempfile import mkdtemp
-
-# from selenium import webdriver
-# from tempfile import mkdtemp
-# from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By
 
 def handler(event=None, context=None):
     try:
@@ -31,21 +23,6 @@ def handler(event=None, context=None):
     
         chrome = webdriver.Chrome(options=options, service=service)
         chrome.get('https://www.google.com/search?q="test"')
-    
-        # Ожидание, пока не исчезнет баннер с cookies (если он появляется)
-        try:
-            # Ожидание, пока кнопка "Согласиться с cookies" станет доступной и нажать ее
-            accept_cookies_button = WebDriverWait(chrome, 10).until(
-                EC.element_to_be_clickable((By.XPATH, '//button[@aria-label="Согласиться с условиями"]'))
-            )
-            accept_cookies_button.click()
-        except:
-            pass  # Если кнопка не появляется, продолжаем без ее нажатия
-    
-        # Ожидаем загрузки результатов поиска
-        WebDriverWait(chrome, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'h3'))
-        )
     
         # Извлекаем ссылки с результатов поиска
         results = chrome.find_elements(By.CSS_SELECTOR, 'h3')
