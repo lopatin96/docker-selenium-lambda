@@ -27,9 +27,6 @@ def handler(event=None, context=None):
         # Извлекаем ссылки с результатов поиска
         # results = chrome.find_elements(By.CSS_SELECTOR, 'h3')
         # links = [result.find_element(By.XPATH, '..').get_attribute('href') for result in results]
-
-        chrome = webdriver.Chrome(options=options, service=service)
-        chrome.get('https://www.google.com/search?q="test"')
     
         chrome.quit()  # Закрытие браузера
     
