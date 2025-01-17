@@ -22,7 +22,7 @@ def handler(event=None, context=None):
     options.add_argument("--remote-debugging-port=9222")
 
     chrome = webdriver.Chrome(options=options, service=service)
-    chrome.get('https://www.google.com/search?q="test"')
+    chrome.get('https://duckduckgo.com/?q="test"')
 
     # Извлечение ссылок с результатов поиска
     results = chrome.find_elements(By.CSS_SELECTOR, 'h2')
